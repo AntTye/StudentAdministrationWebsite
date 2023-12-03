@@ -1,20 +1,20 @@
 <template>
   <div class="UserProfile">
     <h1>User Profile</h1>
-    <div v-else class="profile-card">
+
+    <div class="profile-card" v-if="user">
       <div class="profile-info">
-        <strong>Full Name:</strong> {{ user.fullname.S }}
+        <strong>Full Name:</strong> {{ user.fullname?.S || 'N/A' }}
       </div>
       <div class="profile-info">
-        <strong>NetID:</strong> {{ user.netid.S }}
+        <strong>NetID:</strong> {{ user.netid?.S || 'N/A' }}
       </div>
       <div class="profile-info">
-        <strong>Email:</strong> {{ user.email.S }}
+        <strong>Email:</strong> {{ user.email?.S || 'N/A' }}
       </div>
       <div class="profile-info">
-        <strong>Number of Classes:</strong> {{ user.classes.L.length }}
+        <strong>Number of Classes:</strong> {{ user.numberOfClasses || 'N/A' }}
       </div>
-      <!-- Add more user information as needed -->
     </div>
   </div>
 </template>
@@ -27,23 +27,46 @@ export default {
       user: {},
     };
   },
+  computed: {
+    numberOfClasses() {
+      return this.user.classes?.L?.length || 0;
+    },
+  },
   async mounted() {
-    const apiUrl = import.meta.env.VITE_GET_PERSON_DATA;
-    try {
-      const response = await fetch(apiUrl);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      this.user = data.Items[0];
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    } finally {
-      this.loading = false;
+    const loggedInUsername = localStorage.getItem('username');
+    if (loggedInUsername) {
+      await this.fetchUserData(loggedInUsername);
+    } else {
+      // Handle case where no user is logged in
+      console.error('No user is logged in');
     }
+  },
+  methods: {
+    async fetchUserData(username) {
+      const apiUrl = import.meta.env.VITE_GET_PERSON_DATA;
+      try {
+        const response = await fetch(`${apiUrl}?netid=${username}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('User Data:', data);
+        const loggedInUser = data.Items.find(item => item.netid.S === username);
+        if (loggedInUser) {
+          this.user = { ...loggedInUser, numberOfClasses: loggedInUser.classes.L.length };
+        } else {
+          console.error('Logged-in user not found');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 };
 </script>
+
 
 <style scoped>
 .UserProfile {

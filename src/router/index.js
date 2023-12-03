@@ -31,7 +31,7 @@ const router = createRouter({
   // and, most importantly, the component that should be rendered for the view
   routes: [
     {
-      path: "/home",
+      path: "/",
       name: "home",
       component: HomeView,
     },
@@ -46,7 +46,7 @@ const router = createRouter({
       component: FetchView,
     },
     {
-      path: "/",
+      path: "/login",
       name: "login",
       component: LoginView,
     },

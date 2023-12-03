@@ -50,9 +50,9 @@ async function handleSubmit() {
             if (response.status === 401) {
                 errorMessage.value = 'Incorrect password.';
             } else if (response.status === 404) {
-                errorMessage.value = 'Incorrect Username.';
+                errorMessage.value = 'Incorrect NetID.';
             } else {
-                errorMessage.value = 'Unknown error. Please try again later.';
+                errorMessage.value = 'Incorrect NetID or Password';
             }
         }
     } catch (error) {

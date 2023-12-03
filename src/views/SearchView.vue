@@ -2,10 +2,19 @@
   <main class=search>
     <!-- Search Bar Implementation-->
     <input type="text" v-model="search" placeholder="Search Classes...">
-
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeModal">&times;</span>
+        <p><strong>Course ID:</strong> {{ selectedClass.courseid.S }}</p>
+        <p><strong>Location:</strong> {{ selectedClass.location.S }}</p>
+        <p><strong>Time:</strong> {{ selectedClass.time.S }}</p>
+        <p><strong>Professor:</strong> {{ selectedClass.instructor.S }}</p>
+        <p><strong>Description:</strong> {{ selectedClass.description.S }}</p>
+      </div>
+    </div>
     <!-- Individual Buttons for Classes Produced by Search, with data from classes object -->
     <div id="wrapper">
-      <div class="item" v-for="item in filteredClasses" :key="item.courseid.S"> <!--uses filteredClasses to search for courses, searches for course number only-->
+      <div class="item" v-for="item in filteredClasses" :key="item.courseid.S" @click="openModal(item)"> <!--uses filteredClasses to search for courses, searches for course number only-->
         <h2 class="text">{{ item.courseid.S }}</h2>
 
         <div class="item detail">
@@ -33,8 +42,10 @@ export default {
         loading: true,
         responseData: {},
         search: '',
-      };
-    },
+        showModal: false,
+      selectedClass: null,
+    };
+  },
 
     computed: {
     filteredClasses() {
@@ -89,7 +100,14 @@ export default {
         console.error('Error enrolling class:', error);
      
       });
-    }
+    },
+    openModal(item){
+      this.selectedClass = item;
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
   },
 };
 </script>
@@ -151,5 +169,45 @@ input {
 }
 .error {
   background-color: tomato;
+}
+.modal {
+  display: block; /* Show the modal */
+  position: fixed; /* Stay in place */
+  z-index: 100; /* Sit on top */
+  left: ;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 0%; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); /* Adding some shadow */
+  /* Centering the modal content box */
+  position: relative;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>
