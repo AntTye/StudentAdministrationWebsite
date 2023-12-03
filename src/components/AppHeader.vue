@@ -2,13 +2,12 @@
   <header class="app-header">
     <div>
       <nav class="nav">
-            <RouterLink to="/">Home</RouterLink>
+            <RouterLink to="/home">Home</RouterLink>
             <RouterLink to="/classes">Enrolled Classes</RouterLink>
             <RouterLink to="/search">Select Classes</RouterLink>
-            <RouterLink to="/fetch">Class Queue</RouterLink>
             <RouterLink to="/Schedule">Schedule</RouterLink>
             <RouterLink to="/Profile">Profile</RouterLink>
-
+            <RouterLink to="/">Logout</RouterLink>
 
 
             <!--
@@ -16,7 +15,7 @@
               Check out router/index.js for how this is defined
             -->
             <!--<RouterLink :to="{ name: 'form' }">Form Example</RouterLink>-->
-            <RouterLink to="/login">Logout</RouterLink>
+           
             
       </nav>
     </div>

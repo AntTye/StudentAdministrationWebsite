@@ -4,95 +4,109 @@
     <input type="text" v-model="search" placeholder="Search Classes...">
 
     <!-- Individual Buttons for Classes Produced by Search, with data from classes object -->
-    <button class="item classes buttons" v-for="(classInfo, index) in classes" :key="classInfo.id" @click="toggleModal(index) && openModal(index)">
-      <p>{{ classInfo.name }}</p>
-    </button>
+    <div id="wrapper">
+      <div class="item" v-for="item in filteredClasses" :key="item.courseid.S"> <!--uses filteredClasses to search for courses, searches for course number only-->
+        <h2 class="text">{{ item.courseid.S }}</h2>
 
-    <!--Modal for each button -->
-    <div class="modal" v-for="(classInfo, index) in classes" :key="classInfo.id" v-if="showModal[index]">
-
-      <!-- Close Button for Modal -->
-      <span class="close" @click="toggleModal(index) && openModal(index)">&times;</span>
-
-      <!-- Header for Modal -->
-      <header class="modal-header"> {{ classInfo.name }} </header>
-
-      <!-- Content for each Modal provided by classes Object-->
-      <div class="item modal-content" id="modal-content">
-        <p><strong>Location:</strong> {{ classInfo.location }}</p>
-        <p><strong>Time:</strong> {{ classInfo.time }}</p>
-        <p><strong>Professor:</strong> {{ classInfo.professor }}</p>
+        <div class="item detail">
+          <p class="text"><strong>Location:</strong> {{ item.location.S }}</p>
+          <p class="text"><strong>Time:</strong> {{ item.time.S }}</p>
+          <p class="text"><strong>Professor:</strong> {{ item.instructor.S }}</p>
+          <button class="addbutton" @click="enrollClass(item.courseid.S)"><strong>Enroll</strong></button>
+        </div>
+        
       </div>
+      
     </div>
 
-    <!-- Failed Search Implementation -->
-    <div class="item error" v-if="input && !filterclasses().length">
-      <p>No results found!</p>
-    </div>
 
   </main>
 </template> 
 
-<script setup>
-
-import { ref } from "vue";
-
+<script>
+import { VueElement, ref } from "vue";
 // Search Bar basic functionality
 let input = ref("");
+export default {
+    data() {
+      return {
+        loading: true,
+        responseData: {},
+        search: '',
+      };
+    },
 
-function filterclasses() {
-  return classes.name.filter((classInfo) =>
-  classInfo.name.toLowerCase().includes(input.value.toLowerCase())
-  );
-}
+    computed: {
+    filteredClasses() {
+      if (!this.search) {
+        // If search is empty, return all classes
+        return this.responseData.Items;
+      }
+      // Return classes that match the search query
+      return this.responseData.Items.filter(item =>
+        item.courseid.S.toLowerCase().includes(this.search.toLowerCase())
+        );
+      },
+    },
 
-const classes = [
-  { id: 1, name: 'CSE2050', location: 'ITE 138', time: 'Tu 10:00 AM - 11:50 AM', professor: 'Prof. Scoggin' },
-  { id: 2, name: 'MATH 2110', location: 'AUST 108', time: 'MoWeFr 10:10 AM -11:00 AM', professor: 'Prof. Hall' },
-  { id: 3, name: 'CHEM 2241', location: 'MCHU 102', time: 'TuTh 8:00am-9:15am', professor: 'Prof. Anwar' },
-  { id: 4, name: 'ME 2233', location: 'BOUS A106', time: 'TuTh 12:30 PM -1:45 PM', professor: 'Prof. Francesco' },
-  { id: 5, name: 'CSE2500', location: 'MCHU 101', time: 'TuTh 10:00 PM - 11:50 PM', professor: 'Prof. Mahmood' },
-  { id: 6, name: 'CSE1007', location: 'MCHU 101', time: 'TuTh 10:00 PM - 11:50 PM', professor: 'Prof. Dawson' },        
-]
- 
-let showModal = ref(Array(classes.length).fill(false));
-
-function toggleModal(index) {
-  showModal.value[index] = !showModal.value[index];
-}
-
-function openModal(index) {
-  if (showModal.value[index] == true) {
-    showModal.value[index].style.display = "block"
-  }
-  else {
-    showModal.value[index].style.display = "none"
-  }  
-}
-
-
-
-
-
+    async mounted() {
+    const apiUrl = import.meta.env.VITE_GET_ALL_API;
+    console.log(apiUrl)
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      this.responseData = await response.json();
+    } 
+    catch (error) {
+      console.error('Error fetching data:', error);
+    } 
+    finally {
+      this.loading = false;
+    }
+  },
+  methods: {
+    enrollClass(CourseID) {
+    //Call Delete API that deletes based on primary key in ClassDATA
+      const api = import.meta.env.VITE_DELETE_CLASS_API;
+      fetch(`${api}/${CourseID}`, {
+        method: 'ADD',
+      })
+      
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(() => {
+        console.log('Class enrolled successfully');
+      //update the local data as well to show change
+        this.responseData.Items = this.responseData.Items.filter(item => item.courseid.S !== CourseID);
+      })
+      .catch(error => {
+        console.error('Error enrolling class:', error);
+     
+      });
+    }
+  },
+};
 </script>
 
 <style>
-
 /* Search Bar Styling */
-
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
 }
-
 body {
   padding: 20px;
   min-height: 100vh;
   background-color: rgb(234, 242, 255);
 }
-
 input {
   display: flex;
   width: 840px; 
@@ -106,9 +120,12 @@ input {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
-
+.text{
+  color: white;
+}
 .item {
   width: 750px ;
+  background-color: #000E2F;
   display: center; 
   margin: 0 auto 10px auto;
   padding: 10px 20px;
@@ -117,60 +134,22 @@ input {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
-
-.classes {
-  background-color: #000E2F;
+.detail {
+  width: 600px;
   cursor: pointer;
   color:white;
 }
-
+.addbutton {
+    background-color: lightskyblue;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+  
+}
 .error {
   background-color: tomato;
 }
-
-/* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-.modal-header {
-  background-color: #000E2F;
-  cursor: pointer;
-  color:white;
-}
-
-/* Modal Content */
-.modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-
-/* The Close Button */
-.close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
 </style>

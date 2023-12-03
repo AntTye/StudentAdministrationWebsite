@@ -12,6 +12,7 @@ import ScheduleView from "../views/ScheduleView.vue";
 import ProfessorInformationView from "../views/ProfessorInformationView.vue";
 import ClassInformationView from "../views/ClassInformationView.vue";
 import ProfileView from "../views/ProfileView.vue";
+import AdminView from "../views/AdminView.vue";
 import APITestingView from "../views/APITestingView.vue";
 
 
@@ -30,7 +31,7 @@ const router = createRouter({
   // and, most importantly, the component that should be rendered for the view
   routes: [
     {
-      path: "/",
+      path: "/home",
       name: "home",
       component: HomeView,
     },
@@ -45,7 +46,7 @@ const router = createRouter({
       component: FetchView,
     },
     {
-      path: "/login",
+      path: "/",
       name: "login",
       component: LoginView,
     },
@@ -59,7 +60,7 @@ const router = createRouter({
     {
       path: "/Schedule",
       name: "Schedule",
-      component: APITestingView,
+      component: ScheduleView,
     },
 
     {
@@ -84,6 +85,12 @@ const router = createRouter({
       path: "/classes",
       name: "classes",
       component: ClassesView,
+    },
+
+    {
+      path: "/admin",
+      name: "admin",
+      component: AdminView,
     },
   ],
 });
