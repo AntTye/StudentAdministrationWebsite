@@ -10,6 +10,7 @@
         <p><strong>Time:</strong> {{ selectedClass.time.S }}</p>
         <p><strong>Professor:</strong> {{ selectedClass.instructor.S }}</p>
         <p><strong>Description:</strong> {{ selectedClass.description.S }}</p>
+        <button class="addbutton" @click="enrollClass(item.courseid.S)"><strong>Enroll</strong></button>
       </div>
     </div>
     <!-- Individual Buttons for Classes Produced by Search, with data from classes object -->
@@ -21,7 +22,6 @@
           <p class="text"><strong>Location:</strong> {{ item.location.S }}</p>
           <p class="text"><strong>Time:</strong> {{ item.time.S }}</p>
           <p class="text"><strong>Professor:</strong> {{ item.instructor.S }}</p>
-          <button class="addbutton" @click="enrollClass(item.courseid.S)"><strong>Enroll</strong></button>
         </div>
         
       </div>
@@ -200,7 +200,8 @@ input {
 .close {
   color: #aaa;
   float: right;
-  font-size: 25px;
+  padding: 0px;
+  font-size: 50px;
   font-weight: bold;
 }
 

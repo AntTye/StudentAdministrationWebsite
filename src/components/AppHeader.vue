@@ -9,7 +9,6 @@
             <RouterLink to="/Profile">Profile</RouterLink>
             <RouterLink to="/">Logout</RouterLink>
 
-
             <!--
               This RouterLink does not point to a specific path, but rather the name of a route.
               Check out router/index.js for how this is defined
@@ -47,10 +46,10 @@ defineProps({
 
 .nav a {
   color:white;
-  padding: 16px;
+  padding: 15px;
   text-decoration: none;
-  font-size: 17px;
-  margin-right: 5px;
+  font-size: 15px;
+  margin-right: 1px;
 }
 
 .nav a:hover {

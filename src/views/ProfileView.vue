@@ -13,7 +13,7 @@
         <strong>Email:</strong> {{ user.email?.S || 'N/A' }}
       </div>
       <div class="profile-info">
-        <strong>Number of Classes:</strong> {{ user.numberOfClasses || 'N/A' }}
+        <strong>Number of Classes Enrolled:</strong> {{ user.numberOfClasses || 'N/A' }}
       </div>
     </div>
   </div>
