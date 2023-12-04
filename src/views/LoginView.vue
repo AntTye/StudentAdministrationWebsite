@@ -44,7 +44,7 @@ async function handleSubmit() {
             // removing : localStorage.removeItem('myKey');
             // clearing : localStorage.clear();
             //successful login
-            router.push('/'); 
+            router.push('/home'); 
         } else {
             const errorData = await response.json();
             if (response.status === 401) {

@@ -2,12 +2,12 @@
   <header class="app-header">
     <div>
       <nav class="nav">
-            <RouterLink to="/">Home</RouterLink>
+            <RouterLink to="/home">Home</RouterLink>
             <RouterLink to="/classes">Enrolled Classes</RouterLink>
             <RouterLink to="/search">Select Classes</RouterLink>
             <RouterLink to="/Schedule">Schedule</RouterLink>
             <RouterLink to="/Profile">Profile</RouterLink>
-            <RouterLink to="/login">Logout</RouterLink>
+            <RouterLink to="/">Logout</RouterLink>
 
 
             <!--

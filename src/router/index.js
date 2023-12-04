@@ -14,6 +14,7 @@ import ClassInformationView from "../views/ClassInformationView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import AdminView from "../views/AdminView.vue";
 import APITestingView from "../views/APITestingView.vue";
+import CreateClassView from "../views/CreateClassView.vue";
 
 
 const router = createRouter({
@@ -31,7 +32,7 @@ const router = createRouter({
   // and, most importantly, the component that should be rendered for the view
   routes: [
     {
-      path: "/",
+      path: "/home",
       name: "home",
       component: HomeView,
     },
@@ -46,7 +47,7 @@ const router = createRouter({
       component: FetchView,
     },
     {
-      path: "/login",
+      path: "/",
       name: "login",
       component: LoginView,
     },
@@ -91,6 +92,11 @@ const router = createRouter({
       path: "/admin",
       name: "admin",
       component: AdminView,
+    },
+    {
+      path: "/createclassview",
+      name: "createclassview",
+      component: CreateClassView,
     },
   ],
 });

@@ -21,6 +21,12 @@
         <img src="@/assets/profile-icon.png" alt="User Profile" />
         <p>User Profile</p>
       </router-link>
+
+      <router-link to="/createclassview" class="box">
+        <img src="@/assets/createclass.png" alt="Create Class" />
+        <p>Create Class</p>
+      </router-link>
+
     </div>
   </main>
 </template>

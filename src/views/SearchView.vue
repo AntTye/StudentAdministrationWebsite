@@ -174,7 +174,7 @@ input {
   display: block; /* Show the modal */
   position: fixed; /* Stay in place */
   z-index: 100; /* Sit on top */
-  left: ;
+  left: 0;
   top: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
